@@ -45,6 +45,8 @@ The client can then send the following commands:
 
 ## Game Play
 
+Here's a [video of the game](video.mov) in action.
+
 The game starts when the first new player logs in. Balls will drop from the top of the screen, and remain in play until they reach the bottom of the screen. To score the most points, bounce the ball off as many paddles as you can.
 
 The goal is to get the highest collective score.
