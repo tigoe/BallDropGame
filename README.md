@@ -57,4 +57,4 @@ The game in its current version does not send the player any information about t
 
 ## B&N Mini Maker Faire, NYC Nov 8 2015
 
-For the [Mini-Maker Faire at Barnes & Noble](http://stores.barnesandnoble.com/store/2234?view) this Sunday Nov. 8, I'll have a router called balldrop, with the WPA login m4k3rf4!r3 The server's address will be 192.168.0.2 port 8080. Make your own controller from this code and come play the game!  Details at 
+For the [Mini-Maker Faire at Barnes & Noble](http://stores.barnesandnoble.com/store/2234?view) this Sunday Nov. 8, I'll have a router called balldrop, with the WPA login m4k3rf4!r3 The server's address will be 192.168.1.2 port 8080. Make your own controller from this code and come play the game!  Details at 
