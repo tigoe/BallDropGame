@@ -54,7 +54,3 @@ The goal is to get the highest collective score.
 The game ends when five balls have dropped. When the game is over, the group's scores will be displayed.
 
 The game in its current version does not send the player any information about the ball or the state of the other players. In order to play the game, you have to be physically present to view the screen of the computer on which the game is running.
-
-## B&N Mini Maker Faire, NYC Nov 8 2015
-
-For the [Mini-Maker Faire at Barnes & Noble](http://stores.barnesandnoble.com/store/2234?view) this Sunday Nov. 8, I'll have a router called balldrop, with the WPA login m4k3rf4!r3 The server's address will be 192.168.1.2 port 8080. Make your own controller from this code and come play the game!  Details at 
