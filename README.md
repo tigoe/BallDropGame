@@ -4,6 +4,8 @@
 
 This is a multiplayer game in which players collaborate to keep a ball from hitting the ground. Each player has a paddle, and can bound the ball off her paddle. When the ball bounces off your paddle, you get a point. Only the first bounce counts, though; subsequent bounces don't get you points. But if the ball bounces off another player's paddle then back to yours, you score again. You can keep scoring forever by bouncing the ball back and forth.
 
+Here's a [video of the game](https://vimeo.com/156162582) in action.
+
 The game is a networked application. Players log in by making a TCP socket connection to the IP address of the computer on which the game is running. For example, if the game is running on a computer with the IP address 192.168.0.2, then you'd make a connection to 192.168.0.2 port 8080, and you'd be connected.
 
 The simplest connection you can make to the game is via a command line interface, using telnet, like so:
@@ -44,8 +46,6 @@ The client can then send the following commands:
 * x - exit
 
 ## Game Play
-
-Here's a [video of the game](video.mov) in action.
 
 The game starts when the first new player logs in. Balls will drop from the top of the screen, and remain in play until they reach the bottom of the screen. To score the most points, bounce the ball off as many paddles as you can.
 
