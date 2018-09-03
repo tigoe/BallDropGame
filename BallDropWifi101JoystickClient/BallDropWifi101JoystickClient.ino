@@ -14,7 +14,7 @@
 #include <SPI.h>
 #include <WiFi101.h>
 
-char ssid[] = "username"; //  your network SSID (name)
+char ssid[] = "ssid"; //  your network SSID (name)
 char pass[] = "password";    // your network password (use for WPA, or use as key for WEP)
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
@@ -23,9 +23,9 @@ int status = WL_IDLE_STATUS;
 // Initialize the Wifi client library
 WiFiClient client;
 
-IPAddress server(10,0,0,2);
+IPAddress server(10,0,0,3);
 
-const int connectButton = A3;  // the pushbutton for connecting/disconnecting
+const int connectButton = 2;  // the pushbutton for connecting/disconnecting
 const int connectionLED = 3;  // this LED indicates whether you're connected
 const int leftLED = 2;        // this LED indicates that you're moving left
 const int rightLED = 4;       // this LED indicates that you're moving right
@@ -78,13 +78,13 @@ void setup()
   pinMode(downLED, OUTPUT);
 
   // configure analog pins for Adafruit joystick:
-  pinMode(A0, OUTPUT);
-  pinMode(A4, OUTPUT);
-  pinMode(A3, INPUT_PULLUP);    // joystick pushbutton
+//  pinMode(A0, OUTPUT);
+//  pinMode(A4, OUTPUT);
+  pinMode(2, INPUT_PULLUP);    // joystick pushbutton
   // turn on A0 for +v connection of joystick:
-  digitalWrite(A0, HIGH);
-  // turn off A4 for gnd connection of joystick:
-  digitalWrite(A4, LOW);
+//  digitalWrite(A0, HIGH);
+//  // turn off A4 for gnd connection of joystick:
+//  digitalWrite(A4, LOW);
 }
 
 void loop()
