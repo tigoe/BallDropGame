@@ -1,16 +1,16 @@
 
 /*
-  This sketch reads a joystick, i,e. 2 analog inputs 
+  This sketch reads a joystick, i,e. 2 analog inputs
   and one digital input, and sends the results serially
 
   created 29 Oct 2015
-  updated 5 Sept 2017
+  updated 7 Sept 2022
   by Tom Igoe
 
   To connect on a POSIX computer:
    cat <serialport> | nc <server address> <server port>
- */
- 
+*/
+
 // pin numbers for the joystick:
 const int xPin = A0;
 const int yPin = A1;
@@ -20,14 +20,23 @@ int lastButton = 0;     // state of the button in previous loop
 int sendInterval = 80;  // min. interval for serial sending
 long lastSend = 0;      // timestamp for sending
 
+bool nameSet = false;
+String myName = "your name";  // change this to your own name
 
 void setup()  {
   Serial.begin(9600);               // initialize serial
   pinMode(buttonPin, INPUT_PULLUP); // joystick pushbutton
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
-
+  // 5 seconds after reset, if the name is not set, send it
+  // (this is crude, and should be replaced by a better interaction):
+  if (millis() > 5000 && !nameSet) {
+    Serial.println("n=" + myName);
+    Serial.println("i");
+    nameSet = true;
+  }
   // read the pushbutton:
   int button = !digitalRead(buttonPin);
 
@@ -35,6 +44,7 @@ void loop() {
   // send its state serially:
   if (button != lastButton && button == 1) {
     Serial.print('x');
+    nameSet = false;
   }
   // save the current state of the button for next loop:
   lastButton = button;
@@ -42,7 +52,7 @@ void loop() {
   // read the joystick inputs:
   char x = joystickRead(xPin);
   char y = joystickRead(yPin);
-  
+
   // since the joystick is read constantly,
   // you don't want to send all the time. Only send
   // if it's off-center, and only send every (sendInterval) ms:
