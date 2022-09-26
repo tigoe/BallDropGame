@@ -7,6 +7,9 @@
  either WiFi101 library (MKR1000) 
  or WiFiNINA library (Nano 33 IoT, MKR1010)
  
+note: WiFi SSID and password are stored in arduino_secrets.h file.
+Make updates to that file with your network credentials.
+ 
  created 20 Jun 2012
  modified 26 Sept 2022
  by Tom Igoe
