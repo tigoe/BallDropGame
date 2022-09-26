@@ -1,80 +1,105 @@
-
 /*
   This sketch reads a joystick, i,e. 2 analog inputs
   and one digital input, and sends the results serially
 
   created 29 Oct 2015
-  updated 7 Sept 2022
+  updated 25 Sept 2022
   by Tom Igoe
 
   To connect on a POSIX computer:
    cat <serialport> | nc <server address> <server port>
 */
 
-// pin numbers for the joystick:
-const int xPin = A0;
-const int yPin = A1;
-const int buttonPin = 2;
 
-int lastButton = 0;     // state of the button in previous loop
-int sendInterval = 80;  // min. interval for serial sending
-long lastSend = 0;      // timestamp for sending
+const int connectButton = 2;  // the pushbutton for connecting/disconnecting
+const int connectionLED = 3;  // this LED indicates whether you're connected
+const int leftLED = 4;        // this LED indicates that you're moving left
+const int rightLED = 5;       // this LED indicates that you're moving right
+const int upLED = 6;          // this LED indicates that you're moving uo
+const int downLED = 7;        // this LED indicates that you're moving down
 
-bool nameSet = false;
-String myName = "your name";  // change this to your own name
+const int sendInterval = 50;     // minimum time between messages to the server
+const int debounceInterval = 5;  // used to smooth out pushbutton readings
 
-void setup()  {
-  Serial.begin(9600);               // initialize serial
-  pinMode(buttonPin, INPUT_PULLUP); // joystick pushbutton
-  pinMode(LED_BUILTIN, OUTPUT);
+int lastButtonState = HIGH;  // previous state of the pushbutton
+long lastTimeSent = 0;       // timestamp of the last server message
+
+void setup() {
+  Serial.begin(9600);  // initialize serial
+  // initialize digital inputs and outputs:
+  pinMode(connectButton, INPUT_PULLUP);
+  pinMode(connectionLED, OUTPUT);
+  pinMode(leftLED, OUTPUT);
+  pinMode(rightLED, OUTPUT);
+  pinMode(upLED, OUTPUT);
+  pinMode(downLED, OUTPUT);
 }
 
 void loop() {
-  // 5 seconds after reset, if the name is not set, send it
-  // (this is crude, and should be replaced by a better interaction):
-  if (millis() > 5000 && !nameSet) {
-    Serial.println("n=" + myName);
-    Serial.println("i");
-    nameSet = true;
+  // check to see if the pushbutton's pressed:
+  int buttonState = digitalRead(connectButton);
+
+  // if the button changes state:
+  if (buttonState != lastButtonState) {
+    // delay for the debounce interval:
+    delay(debounceInterval);
+    if (buttonState == LOW) {
+      // disconnect:
+      Serial.print("x");
+      // send ctrl-C
+      Serial.print(0x1F);
+    }
+    // save current button state for comparison next time:
+    lastButtonState = buttonState;
   }
-  // read the pushbutton:
-  int button = !digitalRead(buttonPin);
 
-  // if the button's changed, and it's pressed,
-  // send its state serially:
-  if (button != lastButton && button == 1) {
-    Serial.print('x');
-    nameSet = false;
+  // if the client's connected, and the send interval has elapsed:
+  if (millis() - lastTimeSent > sendInterval) {
+    // read the joystick and send messages as appropriate:
+    int xSensor = analogRead(A0);
+    delay(1);
+    int ySensor = analogRead(A1);
+
+    // map x and y readings to a 3-point range
+    // and subtract 1 to get -1 to 1, with
+    // 0 at rest:
+    xSensor = map(xSensor, 0, 1023, 0, 3) - 1;
+    ySensor = map(ySensor, 0, 1023, 0, 3) - 1;
+
+    switch (xSensor) {
+      case -1:  //left
+        Serial.print("l");
+        digitalWrite(leftLED, HIGH);
+        break;
+      case 0:  // center
+        digitalWrite(rightLED, LOW);
+        digitalWrite(leftLED, LOW);
+
+        break;
+      case 1:  // right
+        Serial.print("r");
+        digitalWrite(rightLED, HIGH);
+        break;
+    }
+
+    switch (ySensor) {
+      case -1:  //up
+        Serial.print("u");
+        digitalWrite(upLED, HIGH);
+        break;
+      case 0:  // center
+        digitalWrite(upLED, LOW);
+        digitalWrite(downLED, LOW);
+        break;
+      case 1:  // down
+        Serial.print("d");
+        digitalWrite(downLED, HIGH);
+        break;
+    }
+    //save this moment as last time you sent a message:
+    lastTimeSent = millis();
   }
-  // save the current state of the button for next loop:
-  lastButton = button;
 
-  // read the joystick inputs:
-  char x = joystickRead(xPin);
-  char y = joystickRead(yPin);
-
-  // since the joystick is read constantly,
-  // you don't want to send all the time. Only send
-  // if it's off-center, and only send every (sendInterval) ms:
-  if (millis() - lastSend > sendInterval) {
-    if (x != 0) Serial.print(x);
-    if (y != 0) Serial.print(y);
-    lastSend = millis();
-  }
-}
-
-//This function reads the joystick pots:
-
-char joystickRead(int axis) {
-  int result = 0;                   // result of the read
-  int reading = analogRead(axis);   // read the pot
-  if (reading > 600) {              // if the pot is off-center on the high side,
-    if (axis == xPin) result = 'r'; // send r if it's the x axis
-    if (axis == yPin) result = 'u'; // send u if it's the y axis
-  } else if (reading < 300 ) {      // if the pot is off-center on the low side,
-    if (axis == xPin) result = 'l'; // send l if it's the x axis
-    if (axis == yPin) result = 'd'; // send d if it's the y axis
-  }
-  delay(1);       // delay so you don't read the other axis too soon
-  return result;  // return the result
+  // set the connection LED based on the connection state:
+  // digitalWrite(connectionLED, connected);
 }

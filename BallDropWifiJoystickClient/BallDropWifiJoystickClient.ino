@@ -1,10 +1,11 @@
 /*
-  Ethernet Joystick client
+  Joystick client
  Language:  Arduino
  
  This program enables an Arduino to control one paddle 
- in a networked Pong game. Uses an Arduino MKR Ethernet shield
- and the Ethernet library.
+ in a networked Pong game via a TCP socket. Re-written to work with 
+ either WiFi101 library (MKR1000) 
+ or WiFiNINA library (Nano 33 IoT, MKR1010)
  
  created 20 Jun 2012
  modified 26 Sept 2022
@@ -12,20 +13,14 @@
  */
 
 #include <SPI.h>
-#include <Ethernet.h>
+// #include <WiFi101.h>      // use this for MKR1000 board
+#include <WiFiNINA.h>  // use this for Nano 33 IoT or MKR1010 boards
+#include "arduino_secrets.h"
 
-// enter a MAC address here. To be safe on an institutional network,
-// use an address where the first octet ends in 2, 6, A, or E,
-// e.g. 0x 02, 0x86, 0x4A or 0xDE
-// this will ensure that it's a locally administered, unicast address.
-// if you know someone else will be using this sketch on your LAN,
-// don't use the default address below:
-byte mac[] = {
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
-};
+// Initialize the Wifi client library
+WiFiClient client;
 
-const char server[] = "192.168.0.3";
-EthernetClient client;
+const char server[] = "10.18.227.179";
 
 const int connectButton = 2;  // the pushbutton for connecting/disconnecting
 const int connectionLED = 3;  // this LED indicates whether you're connected
@@ -33,8 +28,6 @@ const int leftLED = 4;        // this LED indicates that you're moving left
 const int rightLED = 5;       // this LED indicates that you're moving right
 const int upLED = 6;          // this LED indicates that you're moving uo
 const int downLED = 7;        // this LED indicates that you're moving down
-const int ethConnectLED = 8;  // this LED indicates that there's a good ethernet connection
-const int ethSelectPin = 10;  // pin for the Ethernet shield chip select
 
 const int sendInterval = 50;     // minimum time between messages to the server
 const int debounceInterval = 5;  // used to smooth out pushbutton readings
@@ -48,36 +41,19 @@ void setup() {
   // if serial monitor's not open, wait 3 seconds:
   if (!Serial) delay(3000);
 
-  // initialize pin  as ETH shield chip select pin:
-  Ethernet.init(ethSelectPin);
+  // attempt to connect to Wifi network:
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print("Attempting to connect to SSID: ");
+    Serial.println(SECRET_SSID);
+    // Connect to WPA/WPA2 network.
+    WiFi.begin(SECRET_SSID, SECRET_PASS);
 
-  // if the Ethernet shield can't be detected:
-  while (Ethernet.hardwareStatus() == EthernetNoHardware) {
-    Serial.println("Ethernet shield was not found.");
-    delay(1000);
+    // wait 3 seconds for connection:
+    delay(3000);
   }
 
-  // if the cable's not connected or the port it's plugged into isn't live:
-  while (Ethernet.linkStatus() == LinkOFF) {
-    Serial.println("Ethernet cable is not connected.");
-    delay(1000);
-  }
-
-  // try to connect via DHCP:
-  while (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-    delay(1000);
-  }
-
-  // When you're connected, print out the device's network status:
-  IPAddress ip = Ethernet.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
-
-  // turn on LED to indicate a good link:
-  pinMode(ethConnectLED, OUTPUT);
-  digitalWrite(ethConnectLED, HIGH);
-
+  // you're connected now, so print out the status:
+  printWifiStatus();
   // initialize digital inputs and outputs:
   pinMode(connectButton, INPUT_PULLUP);
   pinMode(connectionLED, OUTPUT);
@@ -168,4 +144,21 @@ void loop() {
     char c = client.read();
     Serial.write(c);
   }
+}
+
+void printWifiStatus() {
+  // print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // print your WiFi shield's IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
+
+  // print the received signal strength:
+  long rssi = WiFi.RSSI();
+  Serial.print("signal strength (RSSI):");
+  Serial.print(rssi);
+  Serial.println(" dBm");
 }

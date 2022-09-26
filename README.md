@@ -8,12 +8,12 @@ Here's a [video of the game](https://vimeo.com/156162582) in action.
 
 The game is a networked application. Players log in by making a TCP socket connection to the IP address of the computer on which the game is running. For example, if the game is running on a computer with the IP address 192.168.0.2, then you'd make a connection to 192.168.0.2 port 8080, and you'd be connected.
 
-The simplest connection you can make to the game is via a command line interface, using telnet, like so:
+The simplest connection you can make to the game is via a command line interface, using netcat, like so:
 
 ```
-$ telnet 192.168.0.2 8080
+$ nc 192.168.0.2 8080
 ```
-The game itself, BallDropServer, is written in [Processing](http://www.processing.org), so you'll need to download the [Processing IDE](https://processing.org/download/) in order to run it.
+The game itself, BallDropServer, is written in [Processing](http://www.processing.org), so you'll need to download the [Processing IDE](https://processing.org/download/) in order to run it, or have someone run it for you (and tell you their IP address).
 
 ## Clients
 
