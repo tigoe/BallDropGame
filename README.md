@@ -25,7 +25,6 @@ The game clients can be written in any programming environment, and for any hard
 * [Arduino Yún](https://www.arduino.cc/en/Main/ArduinoBoardYun) using the [Bridge library](https://www.arduino.cc/en/Reference/YunBridgeLibrary)
 * ESP2866/ATTiny84, programmed with Arduino
 
-
 ## Communication Protocol
 
 When a client connects to the server, the server will send back a greeting and the instructions for controlling a paddle, as follows:
