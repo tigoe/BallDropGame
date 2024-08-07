@@ -30,20 +30,24 @@ The game clients can be written in any programming environment, and for any hard
 When a client connects to the server, the server will send back a greeting and the instructions for controlling a paddle, as follows:
 
 ```
-hi
-l = left, r = right, u = up, d = down
-x = exit
+Key commands:
+w: up, a: left, s: down, d: right
+x: exit
+h: print these instructions to client
+i: toggle name/IP address
+=xxxx\n : set name to xxxx
 1 point for each time the ball hits a new paddle
 (minimum 2 players)
 ```
 
 The client can then send the following commands:
-* l - move paddle left
-* r - move right
-* u - move up
-* d - move down
+* w - move up
+* a - move paddle left
+* s - move down
+* d - move right
+* h - get help instructions
 * i - toggle paddle label between name or IP address
-* n=XXXXX - set name (n= and n are the terminators. Everything between is the name
+* =XXXXX - set name (n= and n are the terminators. Everything between is the name
 * x - exit
 
 ## Game Play
