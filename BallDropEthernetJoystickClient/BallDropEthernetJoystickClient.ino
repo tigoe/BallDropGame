@@ -7,7 +7,7 @@
  and the Ethernet library.
  
  created 20 Jun 2012
- modified 26 Sept 2022
+ modified 7 Aug 2024
  by Tom Igoe
  */
 
@@ -125,8 +125,8 @@ void loop() {
 
     switch (xSensor) {
       case -1:  //left
-        client.print("l");
-        Serial.print("l");
+        client.print("a");
+        Serial.print("a");
         digitalWrite(leftLED, HIGH);
         break;
       case 0:  // center
@@ -135,16 +135,16 @@ void loop() {
 
         break;
       case 1:  // right
-        client.print("r");
-        Serial.print("r");
+        client.print("d");
+        Serial.print("d");
         digitalWrite(rightLED, HIGH);
         break;
     }
 
     switch (ySensor) {
       case -1:  //up
-        client.print("u");
-        Serial.print("u");
+        client.print("w");
+        Serial.print("w");
         digitalWrite(upLED, HIGH);
         break;
       case 0:  // center
@@ -152,7 +152,7 @@ void loop() {
         digitalWrite(downLED, LOW);
         break;
       case 1:  // down
-        client.print("d");
+        client.print("s");
         digitalWrite(downLED, HIGH);
         break;
     }
