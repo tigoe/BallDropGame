@@ -3,7 +3,7 @@
   and one digital input, and sends the results serially
 
   created 29 Oct 2015
-  updated 25 Sept 2022
+  updated 7 Aug 2024
   by Tom Igoe
 
   To connect on a POSIX computer:
@@ -68,7 +68,7 @@ void loop() {
 
     switch (xSensor) {
       case -1:  //left
-        Serial.print("l");
+        Serial.print("a");
         digitalWrite(leftLED, HIGH);
         break;
       case 0:  // center
@@ -77,14 +77,14 @@ void loop() {
 
         break;
       case 1:  // right
-        Serial.print("r");
+        Serial.print("d");
         digitalWrite(rightLED, HIGH);
         break;
     }
 
     switch (ySensor) {
       case -1:  //up
-        Serial.print("u");
+        Serial.print("w");
         digitalWrite(upLED, HIGH);
         break;
       case 0:  // center
@@ -92,7 +92,7 @@ void loop() {
         digitalWrite(downLED, LOW);
         break;
       case 1:  // down
-        Serial.print("d");
+        Serial.print("s");
         digitalWrite(downLED, HIGH);
         break;
     }
