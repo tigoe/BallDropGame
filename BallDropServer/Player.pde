@@ -8,7 +8,8 @@ public class Player {
   boolean gettingName = false;
   String address = "";
   String name = "no name";
-  int label = 1;    // default is to show IP address
+
+  int label = 0;    // default is to show IP address
 
   public Player (float hpos, float vpos, Client someClient) {
     // initialize the localinstance variables:
@@ -56,14 +57,12 @@ public class Player {
 
     // display the name or address of this player near its paddle
     switch (label) {
-    case 0:    // nothing
-      break;
-    case 1:   // IP address
+    case 0:   // IP address
       textSize(10); 
       textAlign(CENTER);
       text(address, paddleH, paddleV + paddleHeight/2 -1 );
       break;
-    case 2:    // name
+    case 1:    // name
       textSize(10); 
       textAlign(CENTER);
       text(name, paddleH, paddleV + paddleHeight/2 -1 );
@@ -76,25 +75,3 @@ public class Player {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -7,7 +7,7 @@
  ball drop game.
  
  Created sometime in 2007
- modified 8 Sept 2014
+ modified 8 Aug 2024
  by Tom Igoe
  
  */
@@ -50,6 +50,14 @@ boolean resultsAreOn = true;   // whether to show results
 
 Player lastPlayerHit;
 String serverIp;
+String instructions = "Key commands:\r\n" 
+  + "w: up, a: left, s: down, d: right\r\n" 
+  + "x: exit\r\n"
+  + "h: print these instructions to client\r\n"
+  + "i: toggle name/IP address\r\n"
+  + "=xxxx\\n : set name to xxxx\r\n"
+  + "1 point for each time the ball hits a new paddle\r\n"
+  + "(minimum 2 players)\r\n";
 
 void setup() {
   // set the window size:
@@ -185,10 +193,7 @@ void makeNewPlayer(Client thisClient) {
   print("We have a new player: ");
   println(newPlayer.client.ip());
   newPlayer.client.write("hi\r\n");
-  newPlayer.client.write("l = left, r = right, u = up, d = down\r\n");
-  newPlayer.client.write("x = exit\r\n");
-  newPlayer.client.write("1 point for each time the ball hits a new paddle\r\n");
-  newPlayer.client.write("(minimum 2 players)\r\n");
+  newPlayer.client.write(instructions);
 }
 
 void listenToClients() {
@@ -211,83 +216,107 @@ void listenToClients() {
 
   // read what the client sent:
   if (speakingPlayer != null) {
-    int whatClientSaid = speakingPlayer.client.read();
+    //int whatClientSaid = speakingPlayer.client.read();
+    String whatClientSaid = speakingPlayer.client.readString();
+    whatClientSaid = whatClientSaid.trim();
     /*
   There a number of things it might have said that we care about:
-     x = exit
-     l = move left   
-     r = move right
-     u = move up
-     d = move down
-     i = display IP address
-     n=XXXXX\n - set name (n,= and \n are the terminators. Everyting between is the name)
+     x - exit
+     w - move up
+     a - move left 
+     s - move down
+     d - move right
+     h - help
+     i - toggle IP address/name
+     = - XXXXX\n - set name (n,= and \n are the terminators. Everyting between is the name)
      */
+    println(speakingPlayer.gettingName);
+    println(whatClientSaid);
+    println("now the if.....");
+
     if (speakingPlayer.gettingName == true) {
-      if (speakingPlayer.name.length() >= 16) {
-        speakingPlayer.client.write("name changed to " + speakingPlayer.name + "\r\n");
-        speakingPlayer.gettingName = false;
-      }
-      switch (whatClientSaid) { 
-
-      case '\n':
-        speakingPlayer.client.write("new name: " + speakingPlayer.name + "\r\n"); 
-        speakingPlayer.gettingName = false;
-        break;
-      case '=':
-      case '\r': // ignore the carriage return
-        break;
-      default:
-        speakingPlayer.name += char(whatClientSaid);
-      }
+      println("naming client" + whatClientSaid);
+      speakingPlayer.name = whatClientSaid;
+      speakingPlayer.label = 1;
+      speakingPlayer.showPaddle();
+      speakingPlayer.gettingName = false;
     } else {
-      switch (whatClientSaid) { 
-        // If the client says "exit", disconnect it 
-      case 'x':
-        // say goodbye to the client:
-        speakingPlayer.client.write("bye\r\n"); 
-        // disconnect the client from the server:
-        println(speakingPlayer.client.ip() + "\t left"); 
-        myServer.disconnect(speakingPlayer.client); 
-        // remove the client's Player from the playerList:
-        playerList.remove(speakingPlayer);
-
-        break;
-      case 'l':
-        // if the client sends an "l", move the paddle left
-        speakingPlayer.movePaddle(-30);
-        break;
-      case 'u':
-        // if the client sends an "u", move the paddle up
-        speakingPlayer.raisePaddle(-10);
-        break;
-      case 'd':
-        // if the client sends an "d", move the paddle down
-        speakingPlayer.raisePaddle(10);
-        break;
-
-      case'r':
-        // if the client sends a "r", move the paddle right
-        speakingPlayer.movePaddle(30);
-        break;
-      case 'i':
-        // toggle the address of this player:
-        if (speakingPlayer.label < 2) {
-          speakingPlayer.label++;
-        } else {
-          speakingPlayer.label = 0;
-        }
-        break;
-      case 'n':
-        speakingPlayer.name = "";
-        speakingPlayer.client.write("enter a new name, 16 characters max.:\r\n");
-        speakingPlayer.gettingName = true;
-        break;
-      default:
-        break;
-      }
+      println("interpreting " + whatClientSaid);
+      // send the string to the interpreter:
+      interpretCmd(speakingPlayer, whatClientSaid);
     }
   }
 }
+
+
+void interpretCmd(Player whichPlayer, String message ) {
+  int c = 0;
+  while ( c < message.length()) {
+    char cmd = message.charAt(c);
+    switch (cmd) { 
+      // If the client says "exit", disconnect it 
+    case 'x':
+      // say goodbye to the client:
+      whichPlayer.client.write("bye\r\n"); 
+      // disconnect the client from the server:
+      println(whichPlayer.client.ip() + "\t left"); 
+      myServer.disconnect(whichPlayer.client); 
+      // remove the client's Player from the playerList:
+      playerList.remove(whichPlayer);
+      break;
+    case 'a':    // left
+      // if the client sends an "a", move the paddle left
+      whichPlayer.movePaddle(-30);
+      break;
+    case 'w':    // up
+      // if the client sends an "w", move the paddle up
+      whichPlayer.raisePaddle(-10);
+      break;
+    case 's':    // down
+      // if the client sends an "s", move the paddle down
+      whichPlayer.raisePaddle(10);
+      break;
+    case 'd':    // right
+      // if the client sends a "d", move the paddle right
+      whichPlayer.movePaddle(30);
+      break;
+    case 'i':    // toggle name/ip
+      // if the client sents an "i" toggle the address of this player:
+      if (whichPlayer.label == 1) {
+        whichPlayer.label = 0;
+      } else {
+        whichPlayer.label = 1;
+      }
+      break;
+    case 'h': // send the instructions to the client:
+      whichPlayer.client.write(instructions);
+      break;
+    case '=':    // rename client
+      whichPlayer.gettingName = true;
+      // The string will be "=xxxx". Set the name with all but the =: 
+      String newName = message.substring(1);
+      if (newName.length() < 17) {
+        // set the new name with everything past the = sign:
+        whichPlayer.name = newName;
+        // toggle to show name:
+        whichPlayer.label = 1;
+        whichPlayer.client.write("name changed to " + whichPlayer.name + "\r\n");
+        // change to not name setting mode:
+        whichPlayer.gettingName = false;
+        // set c to message length to exit while loop:
+        c = message.length();
+      } else {
+        // alert the remote client that there's an error:
+        whichPlayer.client.write("Name is more than 16 characters, too long\r\n");
+      }
+      break;
+    default:
+      break;
+    }
+    c++;
+  }
+}
+
 
 void gameDraw() {
   background(0);
@@ -310,7 +339,6 @@ void gameDraw() {
 
   // if the game is over, show the winner:
   if (gameOver) {
-
     if (resultsAreOn) {
       displayResults();
     } else {
@@ -348,14 +376,9 @@ void showInstructions() {
   textAlign(LEFT);
   int leftMargin = 100;
   text("Log in to " + serverIp + " port 8080 to play", leftMargin, height/2);
-  text("l = left, r = right, u = up, d = down", leftMargin, height/2 + 30);
-  text("i = display name/IP address", leftMargin, height/2 + 60);
-  text("n=XXXXX\\n - set name (n,= and \\n are the terminators.", leftMargin, height/2 + 90);
-  text("                      Everything between is the name)", leftMargin, height/2 + 120);
-  text("x = exit", leftMargin, height/2 + 150);
-  text("1 point for each time the ball hits a new paddle", leftMargin, height/2 + 180);
-  text("(minimum 2 players)", leftMargin, height/2 + 210);
+  text(instructions, leftMargin, height/2 + 30);
 }
+
 void moveBall() {
 
   // local variable for calculating height position:
@@ -462,7 +485,7 @@ void newGame() {
 public void showScore() {
   textSize(24);
   textAlign(LEFT);
-  text("Score: " + topScore, 20, 40); 
+  text("Team Score: " + topScore, 20, 40); 
   textAlign(RIGHT);
   text("remaining balls: " + (5 - hitDeck), width - 20, 40);
 }
