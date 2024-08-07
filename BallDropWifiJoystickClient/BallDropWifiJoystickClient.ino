@@ -11,7 +11,7 @@ note: WiFi SSID and password are stored in arduino_secrets.h file.
 Make updates to that file with your network credentials.
  
  created 20 Jun 2012
- modified 26 Sept 2022
+ modified 7 Aug 2024
  by Tom Igoe
  */
 
@@ -23,8 +23,8 @@ Make updates to that file with your network credentials.
 // Initialize the Wifi client library
 WiFiClient client;
 
-const char server[] = "10.18.227.179";
-
+const char server[] = "10.0.0.2";
+const char yourName[] = "myname";
 const int connectButton = 2;  // the pushbutton for connecting/disconnecting
 const int connectionLED = 3;  // this LED indicates whether you're connected
 const int leftLED = 4;        // this LED indicates that you're moving left
@@ -37,6 +37,8 @@ const int debounceInterval = 5;  // used to smooth out pushbutton readings
 
 int lastButtonState = HIGH;  // previous state of the pushbutton
 long lastTimeSent = 0;       // timestamp of the last server message
+
+int lastConnectState = false;
 
 void setup() {
   //Initialize serial
@@ -104,8 +106,8 @@ void loop() {
 
     switch (xSensor) {
       case -1:  //left
-        client.print("l");
-        Serial.print("l");
+        client.print("s");
+        Serial.print("s");
         digitalWrite(leftLED, HIGH);
         break;
       case 0:  // center
@@ -114,16 +116,16 @@ void loop() {
 
         break;
       case 1:  // right
-        client.print("r");
-        Serial.print("r");
+        client.print("d");
+        Serial.print("d");
         digitalWrite(rightLED, HIGH);
         break;
     }
 
     switch (ySensor) {
       case -1:  //up
-        client.print("u");
-        Serial.print("u");
+        client.print("w");
+        Serial.print("w");
         digitalWrite(upLED, HIGH);
         break;
       case 0:  // center
@@ -131,7 +133,7 @@ void loop() {
         digitalWrite(downLED, LOW);
         break;
       case 1:  // down
-        client.print("d");
+        client.print("s");
         digitalWrite(downLED, HIGH);
         break;
     }
@@ -146,6 +148,16 @@ void loop() {
   if (client.available()) {
     char c = client.read();
     Serial.write(c);
+  }
+
+// if connection state has changed:
+  if (lastConnectState != client.connected()) {
+    if (lastConnectState == false) {
+      // send your name, and change to name display ("i");
+      client.print("=");
+      client.println(yourName);
+    }
+    lastConnectState = client.connected();
   }
 }
 
