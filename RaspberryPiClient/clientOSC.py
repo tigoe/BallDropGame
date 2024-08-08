@@ -33,16 +33,16 @@ def gyro_results(unused_addr, args, x, y, z):
     if millis == 3:
         if x > 0.1:
             print("Right")
-            TN.write(("r\n").encode('ascii'))
+            TN.write(("d\n").encode('ascii'))
         elif x < -0.1:
             print("Left")
-            TN.write(("l\n").encode('ascii'))
+            TN.write(("a\n").encode('ascii'))
         if y < -0.1:
             print("Up")
-            TN.write(("u\n").encode('ascii'))
+            TN.write(("w\n").encode('ascii'))
         elif y > 0.1:
             print("Down")
-            TN.write(("d\n").encode('ascii'))
+            TN.write(("s\n").encode('ascii'))
     
 def exit_gracefully(signum, frame):
     """Handle program exit and close telnet connection"""

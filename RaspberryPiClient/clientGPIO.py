@@ -61,22 +61,22 @@ if __name__ == "__main__":
 
         if LEFT == False:
             print('Left')
-            TN.write(("l\n").encode('ascii'))
+            TN.write(("a\n").encode('ascii'))
             time.sleep(0.2)
             
         if RIGHT == False:
-            print('Left')
-            TN.write(("r\n").encode('ascii'))
+            print('Down')
+            TN.write(("d\n").encode('ascii'))
             time.sleep(0.2)
 
         if UP == False:
-            print('Left')
-            TN.write(("u\n").encode('ascii'))
+            print('Up')
+            TN.write(("w\n").encode('ascii'))
             time.sleep(0.2)
 
         if DOWN == False:
-            print('Left')
-            TN.write(("d\n").encode('ascii'))
+            print('Down')
+            TN.write(("s\n").encode('ascii'))
             time.sleep(0.2)
 
 
