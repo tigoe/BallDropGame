@@ -20,6 +20,7 @@ The game itself, BallDropServer, is written in [Processing](http://www.processin
 The game clients can be written in any programming environment, and for any hardware you wish, as long as your environment can connect to a network and make a TCP socket connection. I've written clients for a few platforms below:
 * [Processing](https://github.com/tigoe/BallDropGame/tree/main/BallDropClient)  works in any version of Processing.
 * [Serial Joystick client](https://github.com/tigoe/BallDropGame/tree/main/SerialJoystick) works on any Arduino with a serial port
+* [Keyboard Joystick client](https://github.com/tigoe/BallDropGame/tree/main/KeyboardJoystick) works on any Arduino that can run the Keyboard library.
 * [Ethernet Joystick client](https://github.com/tigoe/BallDropGame/tree/main/BallDropEthernetJoystickClient) works on any Arduino using the MKR Ethernet shield
 * [WiFi Joystick client](https://github.com/tigoe/BallDropGame/tree/main/BallDropWifiJoystickClient) works on Nano 33 IoT, MKR1010, MKR1000, or any WiFi101- or WiFININA-compatible board.
 
