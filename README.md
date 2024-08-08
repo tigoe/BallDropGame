@@ -23,6 +23,7 @@ The game clients can be written in any programming environment, and for any hard
 * [Keyboard Joystick client](https://github.com/tigoe/BallDropGame/tree/main/KeyboardJoystick) works on any Arduino that can run the Keyboard library.
 * [Ethernet Joystick client](https://github.com/tigoe/BallDropGame/tree/main/BallDropEthernetJoystickClient) works on any Arduino using the MKR Ethernet shield
 * [WiFi Joystick client](https://github.com/tigoe/BallDropGame/tree/main/BallDropWifiJoystickClient) works on Nano 33 IoT, MKR1010, MKR1000, or any WiFi101- or WiFININA-compatible board.
+* [Raspberry Pi clients](https://github.com/tigoe/BallDropGame/tree/main/RaspberryPiClient) in Python(thanks to Cris Valenzuela).
 
 ## Communication Protocol
 
