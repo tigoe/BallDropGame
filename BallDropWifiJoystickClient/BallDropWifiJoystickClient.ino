@@ -11,13 +11,15 @@ note: WiFi SSID and password are stored in arduino_secrets.h file.
 Make updates to that file with your network credentials.
  
  created 20 Jun 2012
- modified 7 Aug 2024
+ modified 8 Aug 2024
  by Tom Igoe
  */
 
 #include <SPI.h>
 // #include <WiFi101.h>      // use this for MKR1000 board
 #include <WiFiNINA.h>  // use this for Nano 33 IoT or MKR1010 boards
+// #include <WiFiS3.h>      // use this for Uno v4 WiFi board
+// #include <WiFi.h>      //Wifi library for ESP32 Nano
 #include "arduino_secrets.h"
 
 // Initialize the Wifi client library
