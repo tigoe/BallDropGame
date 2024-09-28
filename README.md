@@ -64,5 +64,5 @@ The game in its current version does not send the player any information about t
 
 | Rank | Section & Class | Score |
 |------|-----------------|-------|
-| 1    | [Section 2 of Fall 2024](./HighScoreTable/2024Fall-Section2/README.md)     | 1894   |
+| 1    | [Section 2, Fall 2024](./HighScoreTable/2024Fall-Section2/README.md)     | 1894   |
 | ...    | ...     | N/A    |
