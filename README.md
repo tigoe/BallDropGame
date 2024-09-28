@@ -59,3 +59,10 @@ The goal is to get the highest collective score.
 The game ends when five balls have dropped. When the game is over, the group's scores will be displayed.
 
 The game in its current version does not send the player any information about the ball or the state of the other players. In order to play the game, you have to be physically present to view the screen of the computer on which the game is running.
+
+## High Score Table
+
+| Rank | Section & Class | Score |
+|------|-----------------|-------|
+| 1    | [Section 2 of Fall 2024](./HighScoreTable/2024Fall-Section2/README.md)     | 1894   |
+| ...    | ...     | N/A    |
